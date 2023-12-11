@@ -15,6 +15,9 @@ builder.Services.ConfigureRatelimiting();
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCore();
 builder.Services.AddJwt(builder.Configuration);
+builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddAplicacionServices();
 builder.Services.AddDbContext<PushUpClayBioseguridadContext>(options =>
 {

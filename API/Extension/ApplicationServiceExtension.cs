@@ -29,6 +29,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
+
     public static void AddJwt(this IServiceCollection services, IConfiguration configuration)
     {
         //Configuration from AppSettings
@@ -56,6 +57,12 @@ public static class ApplicationServiceExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
                 };
             });
+
+        services.AddAuthorization(options =>
+{
+options.AddPolicy("EmployeePolicy", policy => policy.RequireRole("Employee"));
+});
+
     }
     public static void AddValidationErrors(this IServiceCollection services)
     {
@@ -78,7 +85,7 @@ public static class ApplicationServiceExtensions
         });
     }
 
-     public static void ConfigureRatelimiting(this IServiceCollection services)
+    public static void ConfigureRatelimiting(this IServiceCollection services)
     {
         services.AddMemoryCache();
         services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
@@ -98,5 +105,8 @@ public static class ApplicationServiceExtensions
                     }
             };
         });
+
     }
+
+    
 }

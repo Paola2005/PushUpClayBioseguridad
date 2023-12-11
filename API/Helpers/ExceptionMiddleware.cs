@@ -1,24 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Text.Json;
-using System.Threading.Tasks;
+using API.Helpers;
 
-namespace API.Helpers
+public class ExceptionMiddleware
 {
-    public class ExceptionMiddleware
-    {
-        private readonly RequestDelegate _next;
+    private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionMiddleware> _logger;
     private readonly IHostEnvironment _env;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ExceptionMiddleware(RequestDelegate next,
-        ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+        ILogger<ExceptionMiddleware> logger, IHostEnvironment env,
+        IHttpContextAccessor httpContextAccessor)
     {
         _next = next;
         _logger = logger;
         _env = env;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -32,11 +31,9 @@ namespace API.Helpers
             var statusCode = (int)HttpStatusCode.InternalServerError;
 
             _logger.LogError(ex, ex.Message);
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = statusCode;
 
             var response = _env.IsDevelopment()
-                            ? new ApiException(statusCode, ex.Message, ex.StackTrace.ToString())
+                            ? new ApiException(statusCode, ex.Message, ex.StackTrace)
                             : new ApiException(statusCode);
 
             var options = new JsonSerializerOptions
@@ -45,9 +42,10 @@ namespace API.Helpers
             };
             var json = JsonSerializer.Serialize(response, options);
 
-            await context.Response.WriteAsync(json);
+            context.Response.ContentType = MediaTypeNames.Application.Json;
+            context.Response.StatusCode = statusCode;
 
+            await context.Response.WriteAsync(json);
         }
-    }
     }
 }

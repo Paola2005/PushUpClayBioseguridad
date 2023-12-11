@@ -13,3 +13,4 @@ C:\Users\user\Documents\PushUpClayBioseguridad\Persistence\obj\Debug\net8.0\Pers
 C:\Users\user\Documents\PushUpClayBioseguridad\Persistence\obj\Debug\net8.0\refint\Persistence.dll
 C:\Users\user\Documents\PushUpClayBioseguridad\Persistence\obj\Debug\net8.0\Persistence.pdb
 C:\Users\user\Documents\PushUpClayBioseguridad\Persistence\obj\Debug\net8.0\ref\Persistence.dll
+C:\Users\user\Documents\PushUpClayBioseguridad\Persistence\obj\Debug\net8.0\Persistence.sourcelink.json
